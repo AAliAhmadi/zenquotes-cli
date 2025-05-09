@@ -38,10 +38,10 @@ cd zenquotes-cli
 
 2. Install dependencies
 
--🧪 Requirements
+- 🧪 Requirements
 ```Python 3.7+```, ```requests```, ```colorama```, ```python-dotenv```, ```pyttsx3```
 
-Use command below to install them all.
+- Use command below to install them all.
 ```bash
 pip install -r requirements.txt
 ```
