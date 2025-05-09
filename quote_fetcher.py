@@ -1,66 +1,40 @@
-#!/usr/bin/env python
-# coding: utf-8
+import argparse
+import pyttsx3
+from quote_fetcher import QuoteFetcher
+from colorama import Fore, Style, init
 
-# In[ ]:
+init(autoreset=True)
 
+def main():
+    parser = argparse.ArgumentParser(description="ZenQuotes CLI - Get inspired quotes from the terminal!")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--random", action="store_true", help="Fetch a random quote")
+    group.add_argument("--today", action="store_true", help="Fetch today's quote")
+    group.add_argument("--author", type=str, help="Fetch quote by a specific author")
+    parser.add_argument("--speak", action="store_true", help="Read the quote aloud")
+    parser.add_argument("--list-authors", action="store_true", help="List popular authors")
+    args = parser.parse_args()
 
-import os
-import requests
-from dotenv import load_dotenv
+    fetcher = QuoteFetcher()
 
-# Load environment variables from .env file
-load_dotenv()
+    if args.list_authors:
+        fetcher.list_authors()
+        return
 
-# Set up ZenQuotes API key
-API_KEY = os.getenv("ZENQUOTES_API_KEY")
-BASE_URL = "https://zenquotes.io/api"
+    if args.random:
+        fetcher.get_random()
+    elif args.today:
+        fetcher.get_today()
+    elif args.author:
+        fetcher.get_by_author(args.author)
 
-class QuoteFetcher:
-    def __init__(self):
-        self._quote = None
-        self._author = None
+    fetcher.display_quote()
 
-    def fetch(self, endpoint, params=None):
-        try:
-            headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else {}
-            response = requests.get(f"{BASE_URL}/{endpoint}", params=params, headers=headers)
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as e:
-            print(f"Error: {e}")
-            return None
+    if args.speak:
+        engine = pyttsx3.init()
+        engine.say(fetcher._quote)
+        engine.say(f"by {fetcher._author}")
+        engine.runAndWait()
 
-    def get_random(self):
-        data = self.fetch("random")
-        if data:
-            self._quote = data[0]['q']
-            self._author = data[0]['a']
-
-    def get_today(self):
-        data = self.fetch("today")
-        if data:
-            self._quote = data['q']
-            self._author = data['a']
-
-    def search_author(self, name):
-        data = self.fetch(f"quotes/author/{name}")
-        if data and isinstance(data, list):
-            self._quote = data[0]['q']
-            self._author = data[0]['a']
-        else:
-            print("No quotes found for that author.")
-
-    @property
-    def quote(self):
-        if self._quote:
-            return f"\"{self._quote}\""
-        else:
-            return "No quote available."
-
-    @property
-    def author(self):
-        if self._author:
-            return f"- {self._author}"
-        else:
-            return "No author found."
-
+if __name__ == "__main__":
+    main()
