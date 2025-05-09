@@ -17,6 +17,16 @@ A simple Python program that fetches inspirational quotes from the [ZenQuotes AP
 
 ---
 
+### 📁 File Structure
+```
+zenquotes-cli/
+├── quotes.py
+├── quote_fetcher.py
+├── requirements.txt
+└── README.md
+```
+
+
 ### 🛠️ Installation
 
 1. Clone the repo:
