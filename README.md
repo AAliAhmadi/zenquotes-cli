@@ -45,8 +45,10 @@ pip install -r requirements.txt
 You can use one of the following options:
 ```bash
 python quotes.py --random             # Get a random quote
-python quotes.py --today              # Get the quote of the day
-python quotes.py --author "Einstein"  # Get quotes by Albert Einstein
+python quotes.py --today              # Get today's quote
+python quotes.py --author "Confucius" # Get quote by an author
+python quotes.py --list-authors       # Show popular authors
+python quotes.py --random --speak     # Random quote and speak aloud
 ```
 
 ### 💡 Tip:
