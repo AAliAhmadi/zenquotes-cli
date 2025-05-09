@@ -62,7 +62,17 @@ To see a list of popular authors, run:
 python quotes.py --list-authors
 ```
 
+### 📄 License
+MIT
 
+### 🙏 Thanks
+- [ZenQuotes API](https://zenquotes.io)
+- [Colorama](https://github.com/tartley/colorama)
 
+### ⚠️ Note on Jupyter Notebooks and Colorama
+
+If you are running this project in a **Jupyter Notebook** environment, please note that **Colorama** might not display the colors as expected. Jupyter Notebooks do not support ANSI escape sequences (which are used by Colorama to generate colored text in the terminal). 
+
+For proper color output, it is recommended to run this program in a regular terminal or command prompt. Alternatively, you can modify the code to use HTML or other libraries such as `termcolor` for color output in Jupyter Notebooks.
 
 
