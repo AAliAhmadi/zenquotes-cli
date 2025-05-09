@@ -22,5 +22,5 @@ A simple Python program that fetches inspirational quotes from the [ZenQuotes AP
 1. Clone the repo:
 
 ```bash
-git clone https://github.com/yourusername/zenquotes-cli.git
+git clone https://github.com/AAliAhmadi/zenquotes-cli.git
 cd zenquotes-cli
