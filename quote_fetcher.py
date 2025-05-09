@@ -1,40 +1,63 @@
-import argparse
-import pyttsx3
-from quote_fetcher import QuoteFetcher
-from colorama import Fore, Style, init
+import os
+import requests
+from dotenv import load_dotenv
 
-init(autoreset=True)
+load_dotenv()
 
-def main():
-    parser = argparse.ArgumentParser(description="ZenQuotes CLI - Get inspired quotes from the terminal!")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--random", action="store_true", help="Fetch a random quote")
-    group.add_argument("--today", action="store_true", help="Fetch today's quote")
-    group.add_argument("--author", type=str, help="Fetch quote by a specific author")
-    parser.add_argument("--speak", action="store_true", help="Read the quote aloud")
-    parser.add_argument("--list-authors", action="store_true", help="List popular authors")
-    args = parser.parse_args()
+class QuoteFetcher:
+    def __init__(self, api_key=None):
+        self.api_key = api_key or os.getenv("ZENQUOTES_API_KEY")
+        self.base_url = "https://zenquotes.io/api"
+        self._quote = ""
+        self._author = ""
 
-    fetcher = QuoteFetcher()
+    def _fetch(self, url):
+        try:
+            if self.api_key:
+                url += f"?apikey={self.api_key}"
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as err:
+            print(f"HTTP Error: {err}")
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching quote: {e}")
+        return None
 
-    if args.list_authors:
-        fetcher.list_authors()
-        return
+    def get_random(self):
+        data = self._fetch(f"{self.base_url}/random")
+        if data:
+            self._quote = data[0]['q']
+            self._author = data[0]['a']
 
-    if args.random:
-        fetcher.get_random()
-    elif args.today:
-        fetcher.get_today()
-    elif args.author:
-        fetcher.get_by_author(args.author)
+    def get_today(self):
+        data = self._fetch(f"{self.base_url}/today")
+        if data:
+            self._quote = data[0]['q']
+            self._author = data[0]['a']
 
-    fetcher.display_quote()
+    def get_by_author(self, author):
+        url = f"{self.base_url}/quotes/author/{author.replace(' ', '%20')}"
+        data = self._fetch(url)
+        if data and isinstance(data, list):
+            self._quote = data[0].get('q', 'No quote found.')
+            self._author = data[0].get('a', author)
+        else:
+            print("❌ No quotes found for that author.")
 
-    if args.speak:
-        engine = pyttsx3.init()
-        engine.say(fetcher._quote)
-        engine.say(f"by {fetcher._author}")
-        engine.runAndWait()
+    def display_quote(self):
+        if self._quote and self._author:
+            print(f'\n -> "{self._quote}"\n— {self._author}')
 
-if __name__ == "__main__":
-    main()
+        else:
+            print("⚠️ No quote to display.")
+
+    @staticmethod
+    def list_authors():
+        print("\n🔍 Popular authors you can try:")
+        print(" - Albert Einstein")
+        print(" - Mark Twain")
+        print(" - Maya Angelou")
+        print(" - Confucius")
+        print(" - Oscar Wilde")
+        print(" - Steve Jobs")
