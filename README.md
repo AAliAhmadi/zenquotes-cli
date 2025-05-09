@@ -24,3 +24,28 @@ A simple Python program that fetches inspirational quotes from the [ZenQuotes AP
 ```bash
 git clone https://github.com/AAliAhmadi/zenquotes-cli.git
 cd zenquotes-cli
+```
+
+2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### ⚙️ Usage
+You can use one of the following options:
+```bash
+python quotes.py --random             # Get a random quote
+python quotes.py --today              # Get the quote of the day
+python quotes.py --author "Einstein"  # Get quotes by Albert Einstein
+```
+
+### 💡 Tip:
+To see a list of popular authors, run:
+```bash
+python quotes.py --list-authors
+```
+
+
+
+
+
