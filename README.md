@@ -11,7 +11,7 @@ A simple Python program that fetches inspirational quotes from the [ZenQuotes AP
 
 ### 🚀 Features
 
-- Lightweight CLI tool using `requests` and `colorama`
+- Lightweight CLI tool using `requests`, `pyttsx3` and `colorama`
 - Compatible with both **terminal** and **Jupyter/Colab notebooks**
 - Optionally supports **ZenQuotes API key** for advanced features
 
